@@ -38,6 +38,10 @@ document.addEventListener("click", () => {
   clearInterval(slideShow);
 });
 
+document.addEventListener("touchmove", () => {
+  clearInterval(slideShow);
+});
+
 function showSlides(n: number) {
   const slides: NodeListOf<HTMLElement> =
     document.querySelectorAll(".mySlides");
@@ -55,4 +59,30 @@ function showSlides(n: number) {
 
   slides[slideIndex].style.display = "block";
   dots[slideIndex].className += " active";
+}
+
+document.addEventListener("touchstart", handleTouchStart, false);
+document.addEventListener("touchmove", handleTouchMove, false);
+
+let horizontalStart: number | null = null;
+
+function handleTouchStart(e) {
+  horizontalStart = e.touches[0].clientX;
+}
+
+function handleTouchMove(e) {
+  if (!horizontalStart) {
+    return;
+  }
+
+  let horizontalEnd: number = e.touches[0].clientX;
+  let horizontalMove: number = horizontalStart - horizontalEnd;
+
+  if (horizontalMove > 0) {
+    plusSlides(1);
+  } else {
+    plusSlides(-1);
+  }
+
+  horizontalStart = null;
 }
